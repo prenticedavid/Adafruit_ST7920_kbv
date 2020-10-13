@@ -3,7 +3,7 @@
 This inherits from Adafruit_GFX libraries.
 It should behave exactly like Adafruit's own Adafruit_SSD1306 I2C displays (but without SSD1306 scroll etc).
 
-Adafruit_KS0108_kbv inherits all the methods from  
+Adafruit_ST7920_kbv inherits all the methods from  
 the Adafruit_GFX class: https://learn.adafruit.com/adafruit-gfx-graphics-library/overview  
 and Print class: https://www.arduino.cc/en/Serial/Print
 
@@ -15,7 +15,7 @@ products from Adafruit!
 Written by Limor Fried/Ladyada for Adafruit Industries.
 MIT license, all text above must be included in any redistribution
 
-To download. click the DOWNLOADS button in the top right corner, rename the uncompressed folder Adafruit_ST7920_kbv. Check that the Adafruit_ST7920_kbv folder contains Adafruit_KS0108_kbv.cpp and Adafruit_KS0108_kbv.
+To download. click the DOWNLOADS button in the top right corner, rename the uncompressed folder Adafruit_ST7920_kbv. Check that the Adafruit_ST7920_kbv folder contains Adafruit_ST7920_kbv.cpp and Adafruit_ST7920_kbv.
 
 Place the Adafruit_ST7920_kbv library folder your arduinosketchfolder/libraries/ folder. You may need to create the libraries subfolder if its your first library. Restart the IDE
 
