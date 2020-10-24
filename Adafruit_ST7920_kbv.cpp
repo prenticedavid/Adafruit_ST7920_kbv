@@ -43,14 +43,16 @@ void Adafruit_ST7920_kbv::drawPixel(int16_t x, int16_t y, uint16_t color)
     }
 }
 
-Adafruit_ST7920_kbv::Adafruit_ST7920_kbv(int8_t CS) : Adafruit_GFX(ST7920_WIDTH, ST7920_HEIGHT)
+Adafruit_ST7920_kbv::Adafruit_ST7920_kbv(int8_t CS, int8_t LED) : Adafruit_GFX(ST7920_WIDTH, ST7920_HEIGHT)
 {
     cs = CS;
+    led = LED;
 }
 
 void Adafruit_ST7920_kbv::begin(void)
 {
     _xor = 0x00;
+    backlight(1);
     SPI.begin();
     sendCmd(0x30); //LCD_BASIC);
     sendCmd(0x30); //LCD_BASIC);
@@ -119,6 +121,15 @@ void Adafruit_ST7920_kbv::invertDisplay(bool i)
     sendCmd(i ? 0x07 : 0x04);  //not sure how this should work. fails anyway.
     sendCmd(0x36); //LCD_GFXMODE);
 #endif
+}
+
+void Adafruit_ST7920_kbv::backlight(bool on) 
+{
+    if (led > 0) {
+        pinMode(led, OUTPUT); 
+        digitalWrite(led, on); 
+    }
+    display();   //compatibility with Adafruit_KS0108_kbv class
 }
 
 void Adafruit_ST7920_kbv::sendCmd(byte b)
