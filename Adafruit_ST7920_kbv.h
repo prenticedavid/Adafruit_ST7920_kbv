@@ -16,7 +16,7 @@
 class Adafruit_ST7920_kbv : public Adafruit_GFX {
 
     public:
-        Adafruit_ST7920_kbv(int8_t CS);  //
+        Adafruit_ST7920_kbv(int8_t CS, int8_t LED = -1);  //
         void     begin(void);                       // you only need the constructor
         virtual void     drawPixel(int16_t x, int16_t y, uint16_t color);  // and these three
         virtual void     fillRect(int16_t x, int16_t y, int16_t w, int16_t h, uint16_t color);
@@ -39,14 +39,15 @@ class Adafruit_ST7920_kbv : public Adafruit_GFX {
             return buffer;
         }
         void     display(void);
-        //void     backlight(bool on);
+        void     backlight(bool on);
+        void     dim(bool off) { backlight(!off); } //like Adafruit_SSD1306
 
     protected:
 
     private:
         uint8_t buffer[1024];
         uint8_t _xor;
-        int8_t cs;
+        int8_t cs, led;
         void sendCmd(uint8_t b);
         void sendData(uint8_t b);
 };
