@@ -43,12 +43,17 @@ class Adafruit_ST7920_kbv : public Adafruit_GFX {
         void     dim(bool off) { backlight(!off); } //like Adafruit_SSD1306
 
     protected:
+        uint8_t _left, _rt, _top, _bot;
+        void sendCmd(uint8_t b);
+        void sendData(uint8_t b);
 
     private:
         uint8_t buffer[1024];
         uint8_t _xor;
         int8_t cs, led;
-        void sendCmd(uint8_t b);
-        void sendData(uint8_t b);
+        void st7920Init(void);                       // interface specific
+        void st7920CmdPort(uint8_t cmd, uint8_t port);
+        void st7920BlitRect(const uint8_t *buf, uint8_t x, uint8_t y, 
+                            uint8_t w, uint8_t h, uint8_t isflash);
 };
 #endif
