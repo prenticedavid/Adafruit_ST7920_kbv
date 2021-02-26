@@ -16,7 +16,7 @@
 #define USE_LCD 0x7920   //select header and constructor
 
 #define LCD_BACKLIGHT  9
-#define LCD_CS         10
+#define LCD_CS         10 //10
 
 #include <SPI.h>
 #include <Wire.h>
@@ -34,7 +34,7 @@ Adafruit_SSD1306 display(128, 64, &Wire);
 #define KS0108_INVERSE INVERSE
 #elif USE_LCD == 0x7920
 #include "Adafruit_ST7920_kbv.h" //local
-Adafruit_ST7920_kbv display(10);
+Adafruit_ST7920_kbv display(LCD_CS);
 #define LCD_BEGIN()    display.begin()
 #define KS0108_WHITE   WHITE
 #define KS0108_BLACK   BLACK
@@ -63,7 +63,7 @@ void setup()
     SPI.begin();
     //display.begin();
     LCD_BEGIN();
-    display.invertDisplay(0);
+    //display.invertDisplay(0);
     display.setTextColor(WHITE);
     some_timings();
 }
@@ -175,9 +175,9 @@ void animRect()
         dy = -dy;
         y += dy;
     }
-    display.fillRect(x, y, 64, 32, INVERSE);
+    display.fillRect(x, y, 64, 32, 2);  //INVERSE
     display.display();
-    display.fillRect(x, y, 64, 32, INVERSE);
+    display.fillRect(x, y, 64, 32, 2);  //INVERSE
     delay(40);
 }
 
@@ -388,6 +388,9 @@ int32_t dithertime(void)
     uint32_t t = micros();
     setDither(8);
     fillRectD(0, 0, 128, 64, 1);
+    for (int x = 0; x < display.width(); x += 16) {
+        display.fillRect(x, 0, 8, 64, 2);
+    }
     return micros() - t;
 }
 
@@ -451,8 +454,9 @@ void show_timing(char *name, int32_t t1, int32_t t2)
 {
     char buf[50];
     int frac = ((t1 + 500) / 100) % 10;
-    sprintf(buf, "%s = %ld.%dms, display(0) = %ldms",
-            name, t1 / 1000, frac, t2 / 1000);
+    int frac2 = ((t2 + 500) / 100) % 10;
+    sprintf(buf, "%s = %ld.%dms, display(0) = %ld.%dms",
+            name, t1 / 1000, frac, t2 / 1000, frac2);
     Serial.println(buf);
     delay(1000);
 }
@@ -467,14 +471,14 @@ void some_timings(void)
     show_timing("cls()", t1, t2);
     t1 = dithertime(); t2 = displaytime();
     show_timing("dither(8)", t1, t2);
-    t1 = circletime(64); t2 = circlestime(0);
-    show_timing("circletime(64) [0]", t1, t2 / 128);
-    t1 = circletime(64); t2 = circlestime(1);
-    show_timing("circletime(64) [1]", t1, t2 / 128);
     t1 = fastHtime(); t2 = displaytime();
     show_timing("fastHtime()", t1, t2);
     t1 = fastVtime(); t2 = displaytime();
     show_timing("fastVtime()", t1, t2);
+    t1 = circletime(64); t2 = circlestime(0);
+    show_timing("circletime(64) [0]", t1, t2 / 128);
+    t1 = circletime(64); t2 = circlestime(1);
+    show_timing("circletime(64) [1]", t1, t2 / 128);
     t1 = fillrecttime(0); t2 = displaytime();
     show_timing("fillrecttime(0)", t1, t2);
     t1 = fillrecttime(1); t2 = displaytime();
