@@ -386,7 +386,7 @@ void Adafruit_ST7920_kbv::st7920BlitRect(const uint8_t *buf, uint8_t x, uint8_t 
         if (row > 31) x0 += 8;
         sendCmd(0x80 | (row & 31));
         sendCmd(0x80 | (x0));   //start col
-        p = buf + (row & 31) * 32 + 2 * x0; //rows: 0,1,2,3,... or 32, 33, ...
+        p = (uint8_t*)buf + (row & 31) * 32 + 2 * x0; //rows: 0,1,2,3,... or 32, 33, ...
         col = (x / 16) * 2;        //starts on word boundary
         endcol = (x + w + 7) / 8;  //stops on byte boundary
         while (col < endcol) {
